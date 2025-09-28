@@ -25,6 +25,10 @@ def plurality_value(examples):
 
 
 def entropy(examples):
+   
+    if num_of_examples == 0:
+        return 0
+    
     yes = 0
     no = 0
 
@@ -45,7 +49,33 @@ def entropy(examples):
     return awnser
 
 
-# def importance(attribute, examples):
+def importance(attribute, examples):
+
+    if num_of_examples == 0:
+        return 0
+    
+    init_entropy = entropy(examples)
+    
+    groups = {}
+
+    for i in examples:
+
+        label = i[attribute]
+        if label not in groups:
+
+            groups[label] = []
+
+        groups[label].append(i)
+
+    after = 0
+
+    for label, subset in groups.items():
+        weight = len(subset) / num_of_examples
+        after += weight * entropy(subset)
+
+    gain = init_entropy - after
+    return gain
+
 
 # def partition(examples, attribute):
     
@@ -56,3 +86,4 @@ if __name__ == "__main__":
     from restaurant_data import examples
     print(plurality_value(examples))
     print(entropy(examples))
+    print(importance("Rain", examples))
